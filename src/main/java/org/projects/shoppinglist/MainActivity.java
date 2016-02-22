@@ -8,7 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -45,20 +48,26 @@ public class MainActivity extends AppCompatActivity {
         //only select one item at a time.
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        Button addButton = (Button) findViewById(R.id.addButton);
+        ImageButton addButton = (ImageButton) findViewById(R.id.addNameButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bag.add("Milk");
-                //The next line is needed in order to say to the ListView
-                //that the data has changed - we have added stuff now!
-                getMyAdapter().notifyDataSetChanged();
+                EditText nameCont = (EditText) findViewById(R.id.addNameContent);
+                EditText nameQ = (EditText) findViewById(R.id.addNameQuantity);
+                if (nameCont.getText().toString().trim().length() > 0) {
+                    if(nameQ.getText().toString().trim().length()>0) {
+                        bag.add(nameQ.getText().toString()+" "+nameCont.getText().toString());
+                        getMyAdapter().notifyDataSetChanged();
+                        nameCont.setText("");
+                        nameQ.setText("");
+                    } else {
+                        nameQ.setError("Must set quantity.");
+                    }
+                } else {
+                    nameCont.setError("Cannot add empty name.");
+                }
             }
         });
-
-        //add some stuff to the list
-        bag.add("Bananas");
-        bag.add("Apples");
 
     }
 
